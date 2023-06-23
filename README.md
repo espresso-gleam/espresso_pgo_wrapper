@@ -3,7 +3,8 @@
 [![Package Version](https://img.shields.io/hexpm/v/espresso_pgo_wrapper)](https://hex.pm/packages/espresso_pgo_wrapper)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/espresso_pgo_wrapper/)
 
-A Gleam project
+Simple wrapper around gleam/pgo that does some very naive query building. Not inteded for use in
+any real world applications.
 
 ## Quick start
 
