@@ -3,7 +3,6 @@
 
 import gleam/pgo.{Connection}
 import gleam/list
-import gleam/option.{None, Option}
 import gleam/io
 import database/query.{Query}
 import database/schema.{Schema}
@@ -53,17 +52,17 @@ pub fn all(q: Query(a), db: Connection) -> Result(List(a), Nil) {
 /// |> where([#("title ilike '%$1%'", [pgo.text(title)])])
 /// |> database.one(db)
 /// ```
-pub fn one(q: Query(a), db: Connection) -> Option(a) {
+pub fn one(q: Query(a), db: Connection) -> Result(a, Nil) {
   let sql = query.build(q)
   case pgo.execute(sql, db, q.bindings, q.from.decoder) {
     Ok(result) -> {
       result.rows
       |> list.first()
-      |> option.from_result()
     }
 
-    Error(_e) -> {
-      None
+    Error(e) -> {
+      io.debug(e)
+      Error(Nil)
     }
   }
 }
