@@ -6,7 +6,7 @@ description = "Simple wrapper around the espresso PGO tool"
 # your project to the Hex package manager.
 #
 licences = ["MIT"]
-repository = { type = "github", user = "nathanjohnson320", repo = "espresso_pgo_wrapper" }
+repository = { type = "github", user = "espresso-gleam", repo = "espresso_pgo_wrapper" }
 # links = [{ title = "Website", href = "https://gleam.run" }]
 
 [dependencies]
