@@ -1,7 +1,7 @@
 //// This is the main entry point for interacting with pgo dbs.
 //// It does things like selecting all rows, single records, inserting, updating, and deleting.
 
-import gleam/pgo.{Connection, QueryError}
+import gleam/pgo.{Connection}
 import gleam/list
 import gleam/option.{None, Option}
 import gleam/io
@@ -23,13 +23,14 @@ import database/schema.{Schema}
 /// |> select(["*"])
 /// |> database.all(db)
 /// ```
-pub fn all(q: Query(a), db: Connection) -> Result(List(a), QueryError) {
+pub fn all(q: Query(a), db: Connection) -> Result(List(a), Nil) {
   let sql = query.build(q)
   case pgo.execute(sql, db, q.bindings, q.from.decoder) {
     Ok(result) -> Ok(result.rows)
 
     Error(e) -> {
-      Error(e)
+      io.debug(e)
+      Error(Nil)
     }
   }
 }
@@ -82,20 +83,20 @@ pub fn insert(
   schema: Schema(a),
   data: List(pgo.Value),
   db: Connection,
-) -> Result(a, QueryError) {
+) -> Result(a, Nil) {
   let sql = query.insert(schema)
 
   case pgo.execute(sql, db, data, schema.decoder) {
     Ok(result) -> {
       case list.first(result.rows) {
         Ok(result) -> Ok(result)
-        Error(_e) -> Error(pgo.UnexpectedResultType([]))
+        Error(_e) -> Error(Nil)
       }
     }
 
     Error(e) -> {
       io.debug(e)
-      Error(e)
+      Error(Nil)
     }
   }
 }
@@ -122,7 +123,7 @@ pub fn update(
   query: Query(a),
   data: List(#(String, pgo.Value)),
   db: Connection,
-) -> Result(a, QueryError) {
+) -> Result(a, Nil) {
   let sql = query.update(query, data)
 
   let bindings =
@@ -141,13 +142,13 @@ pub fn update(
     Ok(result) -> {
       case list.first(result.rows) {
         Ok(result) -> Ok(result)
-        Error(_e) -> Error(pgo.UnexpectedResultType([]))
+        Error(_e) -> Error(Nil)
       }
     }
 
     Error(e) -> {
       io.debug(e)
-      Error(e)
+      Error(Nil)
     }
   }
 }
@@ -164,20 +165,20 @@ pub fn update(
 /// |> where([#("id = $1", [pgo.int(id)])])
 /// |> database.delete(db)
 /// ```
-pub fn delete(query: Query(a), db: Connection) -> Result(a, QueryError) {
+pub fn delete(query: Query(a), db: Connection) -> Result(a, Nil) {
   let sql = query.delete(query)
 
   case pgo.execute(sql, db, query.bindings, query.from.decoder) {
     Ok(result) -> {
       case list.first(result.rows) {
         Ok(result) -> Ok(result)
-        Error(_e) -> Error(pgo.UnexpectedResultType([]))
+        Error(_e) -> Error(Nil)
       }
     }
 
     Error(e) -> {
       io.debug(e)
-      Error(e)
+      Error(Nil)
     }
   }
 }

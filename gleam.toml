@@ -1,5 +1,5 @@
 name = "espresso_pgo_wrapper"
-version = "0.0.1"
+version = "0.0.2"
 description = "Simple wrapper around the espresso PGO tool"
 
 # Fill out these fields if you intend to generate HTML documentation or publish
